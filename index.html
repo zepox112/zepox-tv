@@ -19,13 +19,11 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Menu inavyokaa */
         #sidebar {
             transition: transform 0.3s ease;
             z-index: 100;
         }
 
-        /* Focus style kwa ajili ya Remote ya TV */
         .channel-item:focus {
             background-color: #2563eb !important;
             border: 3px solid white !important;
@@ -37,7 +35,6 @@
             height: calc(100vh - 180px);
             overflow-y: auto;
             scroll-behavior: smooth;
-            /* Inafanya scrolling iwe laini */
         }
 
         .video-js {
@@ -98,16 +95,21 @@
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
         const player = videojs('my-video');
-        const ZEPOX_URL = "https://a0504dae9c72cdb02b00ddedf6df4973.livehwc4.com/pullsgp.yyzb456.top/live/stream-698168_lhd.m3u8?sub_m3u8=true&edge_slice=true&user_session_id=8c55b0e9e2ac74d562bc04f0d4394478";
-        let allChannels = [{ name: "⭐ ZEPOX TV OFFICIAL 1", url: ZEPOX_URL }];
 
-        // --- REMOTE CONTROL OPTIMIZATION ---
+        // Link zako mpya zimeongezwa hapa mwanzo
+        let allChannels = [
+            { name: "⚽ EPL 1", url: "https://ml-pull-hwc.myco.io/EPLBONGO4/hls/EPLBONGO4_H264-1080p.m3u8?pkg_media=video&pkg_hm=index.m3u8&pkg_svc=1&pkg_vcodec=avc1" },
+            { name: "⚽ EPL 2", url: "https://ml-pull-hwc.myco.io/EPLBONGO3/hls/EPLBONGO3_H264-1080p.m3u8?pkg_media=video&pkg_hm=index.m3u8&pkg_svc=1&pkg_vcodec=avc1" },
+            { name: "⚽ EPL 3", url: "https://livecdn-bp-nobar.maypn.stream/stream/27/chunks.m3u8?x-sign=fa393209a0d4213e1d0d9984572f48e6&x-time=1773508620&is_vip=true&token=nobar-32af4d64-22ed-4c36-b95c-082345ba7e70" },
+            { name: "⭐ ZEPOX TV OFFICIAL 1", url: "https://a0504dae9c72cdb02b00ddedf6df4973.livehwc4.com/pullsgp.yyzb456.top/live/stream-698168_lhd.m3u8?sub_m3u8=true&edge_slice=true&user_session_id=8c55b0e9e2ac74d562bc04f0d4394478" }
+        ];
+
         window.addEventListener('keydown', function (e) {
             const list = document.getElementById('channel-container');
             if (e.key === "PageDown") {
-                list.scrollTop += 500; // Scroll kwa kasi zaidi chini
+                list.scrollTop += 500;
             } else if (e.key === "PageUp") {
-                list.scrollTop -= 500; // Scroll kwa kasi zaidi juu
+                list.scrollTop -= 500;
             }
         });
 
@@ -118,7 +120,7 @@
 
         async function init() {
             renderChannels(allChannels);
-            playChannel(ZEPOX_URL);
+            playChannel(allChannels[0].url); // Inaanza na EPL 1
 
             try {
                 const res = await fetch('https://iptv-org.github.io/iptv/index.m3u');
@@ -145,9 +147,11 @@
 
         function renderChannels(channels) {
             const container = document.getElementById('channel-container');
-            // TBC na Zepox kwanza
+            // Kupanga: EPL kwanza, kisha ZEPOX, kisha nyingine
             const sorted = [...channels].sort((a, b) => {
-                if (a.name.includes("ZEPOX") || a.name.includes("TBC")) return -1;
+                if (a.name.includes("EPL")) return -1;
+                if (b.name.includes("EPL")) return 1;
+                if (a.name.includes("ZEPOX")) return -1;
                 return 0;
             });
 
@@ -166,6 +170,7 @@
             }
             player.src({ src: url, type: 'application/x-mpegURL' });
             player.play().catch(() => {
+                // Jaribio la kutumia proxy kama link ikigoma moja kwa moja
                 player.src({ src: "https://corsproxy.io/?" + encodeURIComponent(url), type: 'application/x-mpegURL' });
                 player.play();
             });
@@ -176,7 +181,6 @@
             renderChannels(allChannels.filter(ch => ch.name.toLowerCase().includes(q)));
         }
 
-        // Clock
         setInterval(() => {
             const options = { timeZone: 'Africa/Dar_es_Salaam', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB', options) + " EAT";
