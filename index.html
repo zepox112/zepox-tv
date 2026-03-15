@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zepox TV | AI 4K FullScreen Fix</title>
+    <title>Zepox TV | Ultimate Fix</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
@@ -19,38 +19,49 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Hii ndiyo watermark itakayolazimishwa kukaa juu ya video kila wakati */
+        /* Watermark ya Full Screen - Imeboreshwa ionekane zaidi */
         .vjs-center-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            font-size: 8vw;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.12);
-            pointer-events: none;
-            text-transform: uppercase;
-            white-space: nowrap;
-            letter-spacing: 10px;
-            user-select: none;
-            display: block;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 9999 !important;
+            /* Juu ya kila kitu */
+            font-size: 10vw !important;
+            font-weight: 900 !important;
+            color: rgba(255, 255, 255, 0.15) !important;
+            pointer-events: none !important;
+            text-transform: uppercase !important;
+            white-space: nowrap !important;
+            letter-spacing: 5px !important;
+            user-select: none !important;
+            display: block !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        /* AI Filters */
-        .ai-enhanced-4k video {
-            filter: contrast(1.15) brightness(1.05) saturate(1.25) !important;
-            image-rendering: -webkit-optimize-contrast;
-        }
-
-        .channel-list {
-            height: calc(100vh - 170px);
+        /* Gridi ya channel kwa ajili ya simu */
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            height: calc(100vh - 180px);
             overflow-y: auto;
         }
 
-        .active-channel {
-            background: linear-gradient(90deg, #1e40af 0%, #0f172a 100%) !important;
-            border-left: 5px solid #60a5fa !important;
+        .channel-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .active-card {
+            border-color: #3b82f6;
+            background: rgba(37, 99, 235, 0.2);
         }
 
         @media (max-width: 768px) {
@@ -88,89 +99,82 @@
 
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
-    <header class="p-4 bg-slate-900 border-b border-slate-800 flex justify-between items-center shadow-2xl">
+    <header class="p-3 bg-slate-900 border-b border-slate-800 flex justify-between items-center">
         <div class="flex items-center gap-3">
             <button onclick="toggleMenu()" class="bg-blue-600 p-2 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
-            <h1 class="text-xl font-black text-blue-500 italic uppercase">ZEPOX <span class="text-white">TV</span></h1>
+            <h1 class="text-lg font-black text-blue-500 italic uppercase">ZEPOX <span class="text-white">TV</span></h1>
         </div>
-        <div id="ai-badge"
-            class="hidden text-[10px] font-bold px-3 py-1 rounded-full bg-blue-600 text-white animate-bounce">AI 4K
-            ACTIVE</div>
+        <div id="ai-status" class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800 text-slate-400">720p MODE</div>
     </header>
 
-    <main class="flex flex-1 overflow-hidden relative">
+    <main class="flex flex-1 overflow-hidden">
         <aside id="sidebar" class="bg-slate-950 border-r border-slate-900 flex flex-col p-4">
             <input type="text" id="search" oninput="searchChannels()"
-                class="w-full bg-slate-900 p-3 rounded-xl text-sm outline-none border border-slate-800 mb-4"
+                class="w-full bg-slate-900 p-3 rounded-xl text-xs outline-none border border-slate-800 mb-4"
                 placeholder="Tafuta...">
-            <div id="channel-container" class="channel-list space-y-2"></div>
+            <div id="channel-container" class="channel-grid"></div>
             <button onclick="upgradeToAI()"
-                class="mt-4 p-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-xs font-bold rounded-xl shadow-lg active:scale-95">ACTIVATE
-                AI 4K (5,000/=)</button>
+                class="mt-4 p-3 bg-blue-600 text-white text-[10px] font-bold rounded-xl uppercase">Washa AI 4K
+                (5,000/=)</button>
         </aside>
 
-        <section class="flex-1 bg-black relative flex items-center justify-center">
-            <div id="video-wrapper" class="w-full h-full relative">
-                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" playsinline></video>
-            </div>
+        <section class="flex-1 bg-black relative">
+            <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" playsinline
+                webkit-playsinline disablePictureInPicture></video>
         </section>
     </main>
 
     <script>
-        const player = videojs('my-video');
+        // Tunatumia Video.js lakini tunaizuia isitumie native controls za simu
+        const player = videojs('my-video', {
+            html5: { nativeAudioTracks: false, nativeVideoTracks: false, hls: { overrideNative: true } },
+            nativeControlsForTouch: false
+        });
+
         let isSubscribed = false;
 
-        // --- MUHIMU: Kutengeneza Watermark ndani ya Player ---
+        // Tengeneza Watermark
         const centerWM = document.createElement('div');
         centerWM.className = 'vjs-center-watermark';
-        centerWM.id = 'internal-wm';
         centerWM.innerText = 'ZEPOX TV';
 
-        // Hii inaiingiza watermark ndani ya kioo cha videojs ili isifunikwe na full screen
-        player.el().appendChild(centerWM);
+        // Ingiza watermark ndani ya kioo cha player
+        player.ready(function () {
+            player.el().appendChild(centerWM);
+        });
 
         let allChannels = [
-            { name: "⭐ ZEPOX TV OFFICIAL 1", url: "https://a0504dae9c72cdb02b00ddedf6df4973.livehwc4.com/pullsgp.yyzb456.top/live/stream-698168_lhd.m3u8?sub_m3u8=true&edge_slice=true&user_session_id=8c55b0e9e2ac74d562bc04f0d4394478" },
-            { name: "⚽ EPL 1", url: "https://ml-pull-hwc.myco.io/EPLBONGO4/hls/EPLBONGO4_H264-1080p.m3u8?pkg_media=video&pkg_hm=index.m3u8&pkg_svc=1&pkg_vcodec=avc1" },
-            { name: "⚽ EPL 2", url: "https://ml-pull-hwc.myco.io/EPLBONGO3/hls/EPLBONGO3_H264-1080p.m3u8?pkg_media=video&pkg_hm=index.m3u8&pkg_svc=1&pkg_vcodec=avc1" },
-            { name: "⚽ EPL 3", url: "https://livecdn-bp-nobar.maypn.stream/stream/27/chunks.m3u8?x-sign=fa393209a0d4213e1d0d9984572f48e6&x-time=1773508620&is_vip=true&token=nobar-32af4d64-22ed-4c36-b95c-082345ba7e70" }
+            { name: "ZEPOX OFFICIAL", url: "https://a0504dae9c72cdb02b00ddedf6df4973.livehwc4.com/pullsgp.yyzb456.top/live/stream-698168_lhd.m3u8?sub_m3u8=true&edge_slice=true&user_session_id=8c55b0e9e2ac74d562bc04f0d4394478" },
+            { name: "EPL 1", url: "https://ml-pull-hwc.myco.io/EPLBONGO4/hls/EPLBONGO4_H264-1080p.m3u8?pkg_media=video&pkg_hm=index.m3u8&pkg_svc=1&pkg_vcodec=avc1" },
+            { name: "EPL 2", url: "https://ml-pull-hwc.myco.io/EPLBONGO3/hls/EPLBONGO3_H264-1080p.m3u8?pkg_media=video&pkg_hm=index.m3u8&pkg_svc=1&pkg_vcodec=avc1" },
+            { name: "EPL 3", url: "https://livecdn-bp-nobar.maypn.stream/stream/27/chunks.m3u8?x-sign=fa393209a0d4213e1d0d9984572f48e6&x-time=1773508620&is_vip=true&token=nobar-32af4d64-22ed-4c36-b95c-082345ba7e70" }
         ];
 
         player.on('loadedmetadata', function () {
-            if (isSubscribed) {
-                player.addClass('ai-enhanced-4k');
-            } else {
-                player.removeClass('ai-enhanced-4k');
+            if (!isSubscribed) {
                 const hls = player.tech({ IWillNotUseThisInPlugins: true }).hls;
-                if (hls) {
-                    hls.representations().forEach(rep => {
-                        if (rep.height > 720) rep.enabled(false);
-                    });
-                }
+                if (hls) hls.representations().forEach(rep => { if (rep.height > 720) rep.enabled(false); });
             }
         });
 
-        function upgradeToAI() {
-            if (confirm("Washa AI System (4K) na uondoe Watermark?")) {
-                isSubscribed = true;
-                centerWM.style.display = 'none'; // Inaficha watermark ndani ya player
-                document.getElementById('ai-badge').classList.remove('hidden');
-                player.addClass('ai-enhanced-4k');
-                alert("AI Engine Active!");
-            }
+        function renderChannels(channels) {
+            const container = document.getElementById('channel-container');
+            container.innerHTML = channels.map(ch => `
+                <div onclick="playChannel('${ch.url}', this)" class="channel-card cursor-pointer">
+                    ${ch.name}
+                </div>
+            `).join('');
         }
 
-        function playChannel(url, element = null) {
-            if (element) {
-                document.querySelectorAll('.active-channel').forEach(el => el.classList.remove('active-channel'));
-                element.classList.add('active-channel');
-                if (window.innerWidth < 768) toggleMenu();
-            }
+        function playChannel(url, element) {
+            document.querySelectorAll('.active-card').forEach(el => el.classList.remove('active-card'));
+            element.classList.add('active-card');
+            if (window.innerWidth < 768) toggleMenu();
             player.src({ src: url, type: 'application/x-mpegURL' });
             player.play();
         }
@@ -180,13 +184,14 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        function renderChannels(channels) {
-            const container = document.getElementById('channel-container');
-            container.innerHTML = channels.map(ch => `
-                <button onclick="playChannel('${ch.url}', this)" class="channel-item w-full p-4 bg-slate-900/50 hover:bg-slate-800 rounded-xl truncate text-left text-xs flex items-center gap-3 border border-slate-800/30">
-                    <span class="text-blue-500">▶</span> ${ch.name}
-                </button>
-            `).join('');
+        function upgradeToAI() {
+            if (confirm("Washa AI 4K Enhancer?")) {
+                isSubscribed = true;
+                centerWM.style.display = 'none';
+                document.getElementById('ai-status').innerText = "AI 4K ACTIVE";
+                player.addClass('ai-enhanced-4k');
+                alert("AI Engine Activated!");
+            }
         }
 
         function searchChannels() {
@@ -194,32 +199,8 @@
             renderChannels(allChannels.filter(ch => ch.name.toLowerCase().includes(q)));
         }
 
-        async function init() {
-            renderChannels(allChannels);
-            playChannel(allChannels[0].url);
-
-            setTimeout(async () => {
-                try {
-                    const res = await fetch('https://iptv-org.github.io/iptv/index.m3u');
-                    const data = await res.text();
-                    const lines = data.split('\n');
-                    let current = {};
-                    for (let line of lines) {
-                        if (line.startsWith('#EXTINF:')) current.name = line.split(',')[1].trim();
-                        else if (line.startsWith('http')) {
-                            current.url = line.trim();
-                            if (current.name && !allChannels.some(c => c.url === current.url)) {
-                                allChannels.push({ ...current });
-                            }
-                            current = {};
-                        }
-                    }
-                    renderChannels(allChannels);
-                } catch (e) { console.log("Fetch error"); }
-            }, 1000);
-        }
-
-        init();
+        renderChannels(allChannels);
+        playChannel(allChannels[0].url, document.querySelector('.channel-card'));
     </script>
 </body>
 
